@@ -5,13 +5,15 @@ addEventListener("DOMContentLoaded", () => {
   const $loadrer = document.getElementById("loader_1"),
     $select_emp = document.getElementById("select_emp"),
     $title = document.querySelector("h1"),
-    $Result_Request = document.getElementById("Result_Request");
+    $Result_Request = document.getElementById("Result_Request"),
+    $Chars_Content = document.getElementById("charts_content");
   const getData = async (emp) => {
     $title.innerHTML = `Datos de ${emp}`;
     try {
       // * `http://api.marketstack.com/v1/eod?access_key=${DATA.access_key}&symbols=${emp}&date_from=${DATA.date_from}&date_to=${DATA.date_to}&limit=255`
-      let res = await fetch(`./API/app.json`),
+      let res = await fetch(`../API/app.json`),
         json = await res.json();
+      $Chars_Content.classList.remove("d-none");
       // console.log(res);
       /* 
         console.log(res.ok);
@@ -51,6 +53,11 @@ addEventListener("DOMContentLoaded", () => {
         //   !opciones
         const getOptionChart1 = () => {
           return {
+            tooltip: {
+              show: true,
+              trigger: "axis",
+              triggerOn: "mousemove|click",
+            },
             xAxis: {
               type: "category",
               data: date,
@@ -131,13 +138,80 @@ addEventListener("DOMContentLoaded", () => {
           };
         };
 
+        const getOptionChart3 = () => {
+          return {
+            legend: {},
+            tooltip: {
+              trigger: "axis",
+              showContent: false,
+            },
+            dataset: {
+              source: [
+                ["Date", ...date],
+                ["Open", ...open],
+                ["Hight", ...high],
+                ["Low", ...low],
+                ["Close", ...close],
+              ],
+            },
+            xAxis: { type: "category" },
+            yAxis: { gridIndex: 0 },
+            grid: { top: "55%" },
+            series: [
+              {
+                type: "line",
+                smooth: true,
+                seriesLayoutBy: "row",
+                emphasis: { focus: "series" },
+              },
+              {
+                type: "line",
+                smooth: true,
+                seriesLayoutBy: "row",
+                emphasis: { focus: "series" },
+              },
+              {
+                type: "line",
+                smooth: true,
+                seriesLayoutBy: "row",
+                emphasis: { focus: "series" },
+              },
+              {
+                type: "line",
+                smooth: true,
+                seriesLayoutBy: "row",
+                emphasis: { focus: "series" },
+              },
+              {
+                type: "pie",
+                id: "pie",
+                radius: "30%",
+                center: ["50%", "25%"],
+                emphasis: {
+                  focus: "self",
+                },
+                label: {
+                  formatter: "{b}: {@a} ({d}%)",
+                },
+                /* encode: {
+                  itemName: "Date",
+                  value: date,
+                  tooltip: date,
+                }, */
+              },
+            ],
+          };
+        };
+
         const initCharts = () => {
           const chart1 = echarts.init(document.getElementById("chart1")),
-            chart2 = echarts.init(document.getElementById("chart2"));
+            chart2 = echarts.init(document.getElementById("chart2")),
+            chart3 = echarts.init(document.getElementById("chart3"));
 
           // ? Asignar opción al Chart
           chart1.setOption(getOptionChart1());
           chart2.setOption(getOptionChart2());
+          chart3.setOption(getOptionChart3());
         };
         // ?
 
@@ -146,7 +220,6 @@ addEventListener("DOMContentLoaded", () => {
         // console.log(getOptionChart1().series[0].data[cont] = e.open);
         initCharts();
       });
-
       $Result_Request.classList.add("d-none");
     } catch (err) {
       console.log(
@@ -170,6 +243,7 @@ addEventListener("DOMContentLoaded", () => {
   $select_emp.addEventListener("change", (e) => {
     // console.log(e.target.value);
     $loadrer.classList.remove("d-none");
+    $Chars_Content.classList.add("d-none");
     getData(e.target.value);
   });
   // });
