@@ -5,14 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- * Bootstrap -->
-    <!-- <link
+    <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
-    /> -->
+    />
     <!-- ? Local -->
-    <link rel="stylesheet" href="./sources/bootstrap.css" />
+    <!-- <link rel="stylesheet" href="./sources/bootstrap.css" /> -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
@@ -24,9 +24,9 @@
     />
 
     <!-- * Apache ECharts -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.1/echarts.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.1/echarts.min.js"></script>
     <!-- ? Local -->
-    <script src="./sources/charts.js"></script>
+    <!-- <script src="./sources/charts.js"></script> -->
 
     <link rel="stylesheet" href="styles/style.css" />
     <script src="./scripts/datos.js" type="module"></script>
@@ -57,10 +57,10 @@
         <input type="date" class="form-control" id="date_to" />
       </div>
 
-      <div class="input-group w-25 m-3 d-none">
+      <div class="input-group w-25 m-3">
         <input
           type="button"
-          class="btn btn-outline-primary w-100"
+          class="btn btn-outline-primary w-100 d-none"
           id="getDataBtn"
           value="Consultar"
         />
@@ -73,14 +73,20 @@
         class="d-flex justify-content-center flex-wrap d-none"
         id="charts_content"
       >
-        <div class="col-12">
+        <!-- <div class="col-12">
           <div id="chart1" class="chart"></div>
-        </div>
+        </div> -->
         <div class="col-12">
           <div id="chart2" class="chart"></div>
         </div>
         <div class="col-12">
           <div id="chart3" class="chart"></div>
+        </div>
+        <div class="col-12 d-flex flex-row flex-wrap justify-content-between">
+          <div id="chart_bar1" class="chart w-50"></div>
+          <div id="chart_bar2" class="chart w-50"></div>
+          <div id="chart_bar3" class="chart w-50"></div>
+          <div id="chart_bar4" class="chart w-50"></div>
         </div>
       </div>
     </div>

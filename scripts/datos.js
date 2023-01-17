@@ -6,7 +6,8 @@ addEventListener("DOMContentLoaded", () => {
     $select_emp = document.getElementById("select_emp"),
     $title = document.querySelector("h1"),
     $Result_Request = document.getElementById("Result_Request"),
-    $Chars_Content = document.getElementById("charts_content");
+    $Chars_Content = document.getElementById("charts_content"),
+    $getDataBtn = document.getElementById("getDataBtn");
   const getData = async (emp) => {
     $title.innerHTML = `Datos de ${emp}`;
     try {
@@ -34,6 +35,14 @@ addEventListener("DOMContentLoaded", () => {
         low = [],
         close = [],
         date = [];
+
+      const chart2 = echarts.init(document.getElementById("chart2")),
+        chart3 = echarts.init(document.getElementById("chart3")),
+        chart_bar1 = echarts.init(document.getElementById("chart_bar1")),
+        chart_bar2 = echarts.init(document.getElementById("chart_bar2")),
+        chart_bar3 = echarts.init(document.getElementById("chart_bar3")),
+        chart_bar4 = echarts.init(document.getElementById("chart_bar4"));
+
       json.data.forEach((e) => {
         // console.log("Datos CONSULTADOS");
         open.unshift(e.open);
@@ -41,185 +50,274 @@ addEventListener("DOMContentLoaded", () => {
         low.unshift(e.low);
         close.unshift(e.close);
         date.unshift(e.date);
-        // console.log(series);
-        // console.log(e.open);
-        // console.log(getOptionChart1().series[0].data);
-        // console.log(getOptionChart1().xAxis.data[cont]);
-
-        // getOptionChart1().xAxis.data[cont] = e.close
-        // getOptionChart1().series[0].data[cont] = e.open
-        // getOptionChart1().series[0].data = getOptionChart1().series[0].data.push(e.open)
-        // ? CHARTS
-        //   !opciones
-        const getOptionChart1 = () => {
-          return {
-            tooltip: {
-              show: true,
-              trigger: "axis",
-              triggerOn: "mousemove|click",
-            },
-            xAxis: {
-              type: "category",
-              data: date,
-            },
-            yAxis: {
-              type: "value",
-            },
-            series: [
-              {
-                data: open,
-                type: "line",
-              },
-            ],
-          };
-        };
-
-        const getOptionChart2 = () => {
-          return {
-            title: {
-              text: `Valores de ${emp}`,
-            },
-            tooltip: {
-              trigger: "axis",
-            },
-            legend: {
-              data: [
-                "Open", // Open -> Email
-                "Hight", // Hight -> Union Ads
-                "Low", // Low -> Video Ad
-                "Close", // Close -> Direct
-              ],
-            },
-            grid: {
-              left: "3%",
-              right: "4%",
-              bottom: "3%",
-              containLabel: true,
-            },
-            toolbox: {
-              feature: {
-                saveAsImage: {},
-              },
-            },
-            xAxis: {
-              type: "category",
-              boundaryGap: false,
-              data: date,
-            },
-            yAxis: {
-              type: "value",
-            },
-            series: [
-              {
-                name: "Open",
-                type: "line",
-                // stack: "Total",
-                data: open,
-              },
-              {
-                name: "Hight",
-                type: "line",
-                // stack: "Total",
-                data: high,
-              },
-              {
-                name: "Low",
-                type: "line",
-                // stack: "Total",
-                data: low,
-              },
-              {
-                name: "Close",
-                type: "line",
-                // stack: "Total",
-                data: close,
-              },
-            ],
-          };
-        };
-
-        const getOptionChart3 = () => {
-          return {
-            legend: {},
-            tooltip: {
-              trigger: "axis",
-              showContent: false,
-            },
-            dataset: {
-              source: [
-                ["Date", ...date],
-                ["Open", ...open],
-                ["Hight", ...high],
-                ["Low", ...low],
-                ["Close", ...close],
-              ],
-            },
-            xAxis: { type: "category" },
-            yAxis: { gridIndex: 0 },
-            grid: { top: "55%" },
-            series: [
-              {
-                type: "line",
-                smooth: true,
-                seriesLayoutBy: "row",
-                emphasis: { focus: "series" },
-              },
-              {
-                type: "line",
-                smooth: true,
-                seriesLayoutBy: "row",
-                emphasis: { focus: "series" },
-              },
-              {
-                type: "line",
-                smooth: true,
-                seriesLayoutBy: "row",
-                emphasis: { focus: "series" },
-              },
-              {
-                type: "line",
-                smooth: true,
-                seriesLayoutBy: "row",
-                emphasis: { focus: "series" },
-              },
-              {
-                type: "pie",
-                id: "pie",
-                radius: "30%",
-                center: ["50%", "25%"],
-                emphasis: {
-                  focus: "self",
-                },
-                label: {
-                  formatter: "{b}: {@a} ({d}%)",
-                },
-                /* encode: {
-                  itemName: "Date",
-                  value: date,
-                  tooltip: date,
-                }, */
-              },
-            ],
-          };
-        };
-
+        
+        /*
         const initCharts = () => {
-          const chart1 = echarts.init(document.getElementById("chart1")),
-            chart2 = echarts.init(document.getElementById("chart2")),
-            chart3 = echarts.init(document.getElementById("chart3"));
-
+          // const chart1 = echarts.init(document.getElementById("chart1")),
           // ? Asignar opción al Chart
-          chart1.setOption(getOptionChart1());
-          chart2.setOption(getOptionChart2());
-          chart3.setOption(getOptionChart3());
+          // chart1.setOption(getOptionChart1());
         };
-        // ?
 
-        //   console.log(getOptionChart1().series[0].data);
-        //   console.log(getOptionChart1().xAxis.data);
-        // console.log(getOptionChart1().series[0].data[cont] = e.open);
         initCharts();
+        */
       });
+      // ? CHARTS
+      //   !opciones
+      const getOptionChart2 = () => {
+        return {
+          title: {
+            text: `Valores de ${emp}`,
+          },
+          tooltip: {
+            trigger: "axis",
+          },
+          legend: {
+            data: [
+              "Open", // Open -> Email
+              "Hight", // Hight -> Union Ads
+              "Low", // Low -> Video Ad
+              "Close", // Close -> Direct
+            ],
+          },
+          grid: {
+            left: "3%",
+            right: "4%",
+            bottom: "3%",
+            containLabel: true,
+          },
+          toolbox: {
+            feature: {
+              saveAsImage: {},
+            },
+          },
+          xAxis: {
+            type: "category",
+            boundaryGap: false,
+            data: date,
+          },
+          yAxis: {
+            type: "value",
+          },
+          series: [
+            {
+              name: "Open",
+              type: "line",
+              // stack: "Total",
+              data: open,
+            },
+            {
+              name: "Hight",
+              type: "line",
+              // stack: "Total",
+              data: high,
+            },
+            {
+              name: "Low",
+              type: "line",
+              // stack: "Total",
+              data: low,
+            },
+            {
+              name: "Close",
+              type: "line",
+              // stack: "Total",
+              data: close,
+            },
+          ],
+        };
+      };
+
+      const getOptionChart3 = () => {
+        return {
+          legend: {},
+          tooltip: {
+            trigger: "axis",
+            showContent: false,
+          },
+          dataset: {
+            source: [
+              ["Date", ...date],
+              ["Open", ...open],
+              ["Hight", ...high],
+              ["Low", ...low],
+              ["Close", ...close],
+            ],
+          },
+          xAxis: { type: "category" },
+          yAxis: { gridIndex: 0 },
+          grid: { top: "55%" },
+          series: [
+            {
+              type: "line",
+              smooth: true,
+              seriesLayoutBy: "row",
+              emphasis: { focus: "series" },
+            },
+            {
+              type: "line",
+              smooth: true,
+              seriesLayoutBy: "row",
+              emphasis: { focus: "series" },
+            },
+            {
+              type: "line",
+              smooth: true,
+              seriesLayoutBy: "row",
+              emphasis: { focus: "series" },
+            },
+            {
+              type: "line",
+              smooth: true,
+              seriesLayoutBy: "row",
+              emphasis: { focus: "series" },
+            },
+            {
+              type: "pie",
+              id: "pie",
+              radius: "30%",
+              center: ["50%", "25%"],
+              emphasis: {
+                focus: "self",
+              },
+              label: {
+                formatter: "{b}: {@a} ({d}%)",
+              },
+              /* encode: {
+                itemName: "Date",
+                value: date,
+                tooltip: date,
+              }, */
+            },
+          ],
+        };
+      };
+
+      const getOptionChartBar1 = () => {
+        return {
+          title: {
+            text: `Open`,
+          },
+          tooltip: {
+            show: true,
+            trigger: "axis",
+            triggerOn: "mousemove|click",
+          },
+          xAxis: {
+            type: "category",
+            data: date,
+          },
+          yAxis: {
+            type: "value",
+          },
+          series: [
+            {
+              data: open,
+              type: "bar",
+              showBackground: true,
+              backgroundStyle: {
+                color: "rgba(180, 180, 180, 0.2)",
+              },
+            },
+          ],
+        };
+      };
+
+      const getOptionChartBar2 = () => {
+        return {
+          title: {
+            text: `Hight`,
+          },
+          tooltip: {
+            show: true,
+            trigger: "axis",
+            triggerOn: "mousemove|click",
+          },
+          xAxis: {
+            type: "category",
+            data: date,
+          },
+          yAxis: {
+            type: "value",
+          },
+          series: [
+            {
+              data: high,
+              type: "bar",
+              showBackground: true,
+              backgroundStyle: {
+                color: "rgba(180, 180, 180, 0.2)",
+              },
+            },
+          ],
+        };
+      };
+
+      const getOptionChartBar3 = () => {
+        return {
+          title: {
+            text: `Low`,
+          },
+          tooltip: {
+            show: true,
+            trigger: "axis",
+            triggerOn: "mousemove|click",
+          },
+          xAxis: {
+            type: "category",
+            data: date,
+          },
+          yAxis: {
+            type: "value",
+          },
+          series: [
+            {
+              data: low,
+              type: "bar",
+              showBackground: true,
+              backgroundStyle: {
+                color: "rgba(180, 180, 180, 0.2)",
+              },
+            },
+          ],
+        };
+      };
+
+      const getOptionChartBar4 = () => {
+        return {
+          title: {
+            text: `Close`,
+          },
+          tooltip: {
+            show: true,
+            trigger: "axis",
+            triggerOn: "mousemove|click",
+          },
+          xAxis: {
+            type: "category",
+            data: date,
+          },
+          yAxis: {
+            type: "value",
+          },
+          series: [
+            {
+              data: close,
+              type: "bar",
+              showBackground: true,
+              backgroundStyle: {
+                color: "rgba(180, 180, 180, 0.2)",
+              },
+            },
+          ],
+        };
+      };
+
+      chart2.setOption(getOptionChart2());
+      chart3.setOption(getOptionChart3());
+      chart_bar1.setOption(getOptionChartBar1());
+      chart_bar2.setOption(getOptionChartBar2());
+      chart_bar3.setOption(getOptionChartBar3());
+      chart_bar4.setOption(getOptionChartBar4());
       $Result_Request.classList.add("d-none");
     } catch (err) {
       console.log(
@@ -240,11 +338,16 @@ addEventListener("DOMContentLoaded", () => {
 
   // getData("SONY");
 
-  $select_emp.addEventListener("change", (e) => {
+  $getDataBtn.addEventListener("click", () => {
     // console.log(e.target.value);
     $loadrer.classList.remove("d-none");
     $Chars_Content.classList.add("d-none");
-    getData(e.target.value);
+    // console.log($select_emp.value);
+    getData($select_emp.value);
+  });
+
+  $select_emp.addEventListener("change", () => {
+    $getDataBtn.classList.remove("d-none");
   });
   // });
 });
