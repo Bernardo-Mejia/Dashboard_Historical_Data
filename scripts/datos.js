@@ -1,35 +1,27 @@
 import DATA from "./keys.js";
 
 addEventListener("DOMContentLoaded", () => {
-  // console.log(DATA);
-  const $loadrer = document.getElementById("loader_1"),
+  const $loader = document.getElementById("loader_1"),
     $select_emp = document.getElementById("select_emp"),
     $title = document.querySelector("h1"),
     $Result_Request = document.getElementById("Result_Request"),
     $Chars_Content = document.getElementById("charts_content"),
     $getDataBtn = document.getElementById("getDataBtn");
-  const getData = async (emp) => {
-    $title.innerHTML = `Datos de ${emp}`;
+
+  const getData = async (emp, date_from, date_to) => {
+    $title.innerHTML = `Datos históricos del ${date_from} al ${date_to} de ${emp}`;
     try {
-      // * `http://api.marketstack.com/v1/eod?access_key=${DATA.access_key}&symbols=${emp}&date_from=${DATA.date_from}&date_to=${DATA.date_to}&limit=255`
-      let res = await fetch(`../API/app.json`),
+      // * `http://api.marketstack.com/v1/eod?access_key=${DATA.access_key}&symbols=${emp}&date_from=${date_from}&date_to=${date_to}&limit=${DATA.limit}`
+      // * `../API/app.json`
+      let res = await fetch(
+          `http://api.marketstack.com/v1/eod?access_key=${DATA.access_key}&symbols=${emp}&date_from=${date_from}&date_to=${date_to}&limit=${DATA.limit}`
+        ),
         json = await res.json();
       $Chars_Content.classList.remove("d-none");
-      // console.log(res);
-      /* 
-        console.log(res.ok);
-        console.log(res.status);
-        console.log(res.statusText);
-      */
-      // console.log(json);
-      // console.log(json.data);
-      // console.log(json.data[0]);
 
-      // ! Manejo de error
+      // ! Manejo de excepciones
       if (!res.ok) throw { status: res.status, statusText: res.statusText };
 
-      //   TODO: HTML
-      // * json.data
       let open = [],
         high = [],
         low = [],
@@ -41,28 +33,18 @@ addEventListener("DOMContentLoaded", () => {
         chart_bar1 = echarts.init(document.getElementById("chart_bar1")),
         chart_bar2 = echarts.init(document.getElementById("chart_bar2")),
         chart_bar3 = echarts.init(document.getElementById("chart_bar3")),
-        chart_bar4 = echarts.init(document.getElementById("chart_bar4"));
+        chart_bar4 = echarts.init(document.getElementById("chart_bar4")),
+        chart4 = echarts.init(document.getElementById("chart4"));
 
       json.data.forEach((e) => {
-        // console.log("Datos CONSULTADOS");
         open.unshift(e.open);
         high.unshift(e.high);
         low.unshift(e.low);
         close.unshift(e.close);
         date.unshift(e.date);
-        
-        /*
-        const initCharts = () => {
-          // const chart1 = echarts.init(document.getElementById("chart1")),
-          // ? Asignar opción al Chart
-          // chart1.setOption(getOptionChart1());
-        };
-
-        initCharts();
-        */
       });
       // ? CHARTS
-      //   !opciones
+      // ! opciones
       const getOptionChart2 = () => {
         return {
           title: {
@@ -312,42 +294,121 @@ addEventListener("DOMContentLoaded", () => {
         };
       };
 
+      const getOptionChart4 = () => {
+        return {
+          tooltip: {
+            position: "top",
+          },
+          grid: {
+            height: "50%",
+            top: "10%",
+          },
+          xAxis: {
+            type: "category",
+            data: date, // [...open]
+            splitArea: {
+              show: true,
+            },
+          },
+          yAxis: {
+            type: "category",
+            data: open, // [...date]
+            splitArea: {
+              show: true,
+            },
+          },
+          visualMap: {
+            min: 0,
+            max: 10,
+            calculable: true,
+            orient: "horizontal",
+            left: "center",
+            bottom: "15%",
+          },
+          series: [
+            {
+              name: "Punch Card",
+              type: "heatmap",
+              data: close, // [...close]
+              label: {
+                show: true,
+              },
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowColor: "rgba(0, 0, 0, 0.5)",
+                },
+              },
+            },
+          ],
+        };
+      };
+
       chart2.setOption(getOptionChart2());
       chart3.setOption(getOptionChart3());
       chart_bar1.setOption(getOptionChartBar1());
       chart_bar2.setOption(getOptionChartBar2());
       chart_bar3.setOption(getOptionChartBar3());
       chart_bar4.setOption(getOptionChartBar4());
-      $Result_Request.classList.add("d-none");
+      chart4.setOption(getOptionChart4());
     } catch (err) {
-      console.log(
-        `Ocurrió un error al consultar los datos.\nTipo: ${err.status}\nDescripción: ${err.statusText}`
+      console.error(
+        `Ocurrió un error al consultar los datos.\nTipo: ${
+          err.status || "HTTP 404 Not Found"
+        }\nDescripción: ${err.statusText || "Ocurrió un error"}`
       );
       $Result_Request.classList.remove("d-none");
-      //   console.log(err);
       let message = err.statusText || "Ocurrió un error";
 
-      $Result_Request.innerHTML = `ERROR ${
+      $Result_Request.innerHTML = `
+      <span class="bi-database-exclamation"></span> ERROR ${
         err.status || "HTTP 404 Not Found"
       }: ${message}`;
       $Result_Request.classList.add("text-danger");
     } finally {
-      $loadrer.classList.add("d-none");
+      $loader.classList.add("d-none");
     }
   };
 
-  // getData("SONY");
+  const $contenedor_btn_date = document.getElementById("contenedor_btn_date"),
+    $date_from = document.getElementById("date_from"),
+    $date_to = document.getElementById("date_to");
 
   $getDataBtn.addEventListener("click", () => {
-    // console.log(e.target.value);
-    $loadrer.classList.remove("d-none");
+    $loader.classList.remove("d-none");
     $Chars_Content.classList.add("d-none");
-    // console.log($select_emp.value);
-    getData($select_emp.value);
+    getData($select_emp.value, $date_from.value, $date_to.value);
   });
 
-  $select_emp.addEventListener("change", () => {
-    $getDataBtn.classList.remove("d-none");
+  document.addEventListener("change", (e) => {
+    if (e.target === $select_emp) {
+      $contenedor_btn_date.classList.remove("d-none");
+    }
+
+    if (e.target === $date_from) {
+      const $containet_date_to = document.getElementById("containet_date_to");
+      $containet_date_to.classList.remove("d-none");
+      ValidateDateTo_Date();
+    }
+
+    if (e.target === $date_to) {
+      ValidateDateTo_Date();
+    }
   });
-  // });
+
+  // TODO: Función para validar que la fecha de inicio no sea mayor a la fecha final.
+  const ValidateDateTo_Date = () => {
+    if ($date_from.value > $date_to.value) {
+      $getDataBtn.classList.add("d-none");
+      $Result_Request.classList.remove("d-none");
+      $Result_Request.innerHTML = `
+      <span><span class="bi-exclamation-triangle"></span> ERROR: La fecha de inicio no debe ser mayor a la fecha final.</span>
+      `;
+      $Result_Request.classList.add("text-danger");
+      $loader.classList.add("d-none");
+    } else {
+      $Result_Request.classList.add("d-none");
+      $getDataBtn.classList.remove("d-none");
+    }
+  };
 });
