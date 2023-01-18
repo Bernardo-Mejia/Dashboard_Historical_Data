@@ -30,7 +30,12 @@
     <title>Datos de empresas</title>
   </head>
   <body class="">
-    <h1>Datos históricos</h1>
+    <div class="d-flex flex-column justify-content-evenly">
+      <h1>Gráficas de Datos históricos</h1>
+      <a href="./index.html" class="btn btn-outline-danger m-2 w-25"
+        >Ver datos</a
+      >
+    </div>
     <div class="d-flex flex-column">
       <select class="form-select w-25 m-3" id="select_emp" required>
         <option selected disabled>--Seleccione la empresa que desee--</option>
@@ -39,6 +44,10 @@
         <option value="DIS">DISNEY</option>
         <option value="GM">GENERAL MOTORS</option>
         <option value="SONY">SONY</option>
+        <option value="TSLA">TESLA</option>
+        <option value="AAPL">APPLE</option>
+        <option value="AAPL">APPLE</option>
+        <option value="PYPL">PAYPAL</option>
       </select>
 
       <div id="contenedor_btn_date" class="d-none">

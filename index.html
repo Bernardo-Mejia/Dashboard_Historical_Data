@@ -24,12 +24,55 @@
     <!--
         <span class="bi-alarm"></span> 
     -->
+    <link rel="stylesheet" href="styles/style.css" />
     <!-- * JS -->
     <script src="./scripts/index.js" type="module"></script>
   </head>
   <body>
-    <h1 class="title"></h1>
-    <a class="btn btn-outline-dark ms-2" href="./datos.html">Gráficos</a>
+    <h1 class="title">Datos</h1>
+    <a class="btn btn-outline-dark ms-2 w-25" href="./datos.html">Ver Gráficos</a>
+    <select class="form-select w-25 m-3" id="select_emp" required>
+      <option selected disabled>--Seleccione la empresa que desee--</option>
+      <option value="AMZN">AMAZON</option>
+      <option value="BTC">BITCOIN</option>
+      <option value="DIS">DISNEY</option>
+      <option value="GM">GENERAL MOTORS</option>
+      <option value="SONY">SONY</option>
+      <option value="TSLA">TESLA</option>
+      <option value="AAPL">APPLE</option>
+      <option value="AAPL">APPLE</option>
+      <option value="PYPL">PAYPAL</option>
+    </select>
+
+    <div id="contenedor_btn_date" class="d-none">
+      <div class="input-group w-25 ms-3">
+        <label for="date_from" class="input-group-text w-50"
+          >Fecha de inicio</label
+        >
+        <input type="date" class="form-control" id="date_from" required />
+      </div>
+
+      <div class="input-group w-25 ms-3 d-none" id="containet_date_to">
+        <label for="date_to" class="input-group-text w-50">Fecha final</label>
+        <input type="date" class="form-control" id="date_to" required />
+      </div>
+    </div>
+
+    <div class="input-group w-25 m-3">
+      <input
+        type="button"
+        class="btn btn-outline-primary w-100 d-none"
+        id="getDataBtn"
+        value="Consultar"
+      />
+    </div>
+  </div>
+  <div
+      class="alert alert-danger alert-dismissible fade show mx-5 mb-3 d-none"
+      id="Result_Request"
+      role="alert"
+    ></div>
+    <span class="loader w-100 d-none" id="loader_1"></span>
     <ol id="datos"></ol>
     <div class="container d-flex flex-wrap justify-content-evenly">
 

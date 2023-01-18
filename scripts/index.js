@@ -2,35 +2,30 @@ import DATA from "./keys.js";
 addEventListener("DOMContentLoaded", () => {
   console.log(DATA);
   const $container = document.querySelector(".container"),
+    $loader = document.getElementById("loader_1"),
     $datos = document.getElementById("datos"),
     $h1 = document.querySelector(".title"),
+    $Result_Request = document.getElementById("Result_Request"),
     $fragment = document.createDocumentFragment();
 
-  $h1.textContent = `Datos de ${DATA.symbols}`;
-
-  const getData = async () => {
+  const getData = async (emp, date_from, date_to) => {
     try {
-      // http://api.marketstack.com/v1/eod?access_key=c0a81cfdae174c044ab61c1aaa42018d&symbols=SONY&date_from=2019-01-03&date_to=2023-01-13
-      // * `http://api.marketstack.com/v1/eod?access_key=${DATA.access_key}&symbols=${DATA.symbols}&date_from=${DATA.date_from}&date_to=${DATA.date_to}&limit=255`
-      // https://jsonplaceholder.typicode.com/users
-      let res = await fetch(`./API/app.json`),
+      $h1.textContent = `Datos históricos de ${emp}`;
+      // * `http://api.marketstack.com/v1/eod?access_key=${DATA.access_key}&symbols=${emp}&date_from=${date_from}&date_to=${date_to}&limit=${DATA.limit}`
+
+      let res = await fetch(
+          `http://api.marketstack.com/v1/eod?access_key=${DATA.access_key}&symbols=${emp}&date_from=${date_from}&date_to=${date_to}&limit=${DATA.limit}`
+        ),
         json = await res.json();
-      /*
-      console.log(res);
-      console.log(res.ok);
-      console.log(res.status);
-      console.log(json);
-      console.log(json.data);
-      //   console.log(json.data[0]);
-      */
-     console.log("ola");
 
       // ! Manejo de error
       if (!res.ok) throw { status: res.status, statusText: res.statusText };
 
       //   TODO: HTML
+      $loader.classList.add("d-none");
       // * json.data
       json.data.forEach((el) => {
+        $container.textContent = "";
         // ? div.col-4 card
         const $div_col_4_card = document.createElement("div");
         $div_col_4_card.classList.add(
@@ -53,7 +48,10 @@ addEventListener("DOMContentLoaded", () => {
         // ? h4.card-title
         const $h5_date = document.createElement("h5");
         $h5_date.classList.add("card-title", "text-center");
-        $h5_date.innerHTML = el.date; // ! date <- website
+        let date = el.date.split("T00");
+        $h5_date.innerHTML = `
+          <span class="bi-calendar2-date"></span> ${date[0]}
+        `; // ! date <- website
 
         // ? ul.list-group list-group-flush
         const $ul_list_group = document.createElement("ul");
@@ -96,17 +94,55 @@ addEventListener("DOMContentLoaded", () => {
       //   console.log(err);
       let message = err.statusText || "Ocurrió un error";
 
-      $datos.innerHTML = `ERROR ${
+      $Result_Requestdatos.innerHTML = `ERROR ${
         err.status || "HTTP 404 Not Found"
       }: ${message}`;
       $datos.classList.add("text-danger");
     }
   };
 
-  getData();
-  setInterval(() => {
-    getData();
-  }, 10000);
+  const $contenedor_btn_date = document.getElementById("contenedor_btn_date"),
+    $date_from = document.getElementById("date_from"),
+    $date_to = document.getElementById("date_to"),
+    $select_emp = document.getElementById("select_emp"),
+    $getDataBtn = document.getElementById("getDataBtn");
+
+  $getDataBtn.addEventListener("click", () => {
+    $loader.classList.remove("d-none");
+    getData($select_emp.value, $date_from.value, $date_to.value);
+  });
+
+  document.addEventListener("change", (e) => {
+    if (e.target === $select_emp) {
+      $contenedor_btn_date.classList.remove("d-none");
+    }
+
+    if (e.target === $date_from) {
+      const $containet_date_to = document.getElementById("containet_date_to");
+      $containet_date_to.classList.remove("d-none");
+      ValidateDateTo_Date();
+    }
+
+    if (e.target === $date_to) {
+      ValidateDateTo_Date();
+    }
+  });
+
+  // TODO: Función para validar que la fecha de inicio no sea mayor a la fecha final.
+  const ValidateDateTo_Date = () => {
+    if ($date_from.value > $date_to.value) {
+      $getDataBtn.classList.add("d-none");
+      $Result_Request.classList.remove("d-none");
+      $Result_Request.innerHTML = `
+      <span><span class="bi-exclamation-triangle"></span> ERROR: La fecha de inicio no debe ser mayor a la fecha final.</span>
+      `;
+      $Result_Request.classList.add("text-danger");
+      $loader.classList.add("d-none");
+    } else {
+      $Result_Request.classList.add("d-none");
+      $getDataBtn.classList.remove("d-none");
+    }
+  };
 });
 
 /*
