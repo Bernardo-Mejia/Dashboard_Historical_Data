@@ -13,7 +13,7 @@ addEventListener("DOMContentLoaded", () => {
     $title.innerHTML = `Gráficas de Datos históricos del ${date_from} al ${date_to} de ${emp}`;
     try {
       let res = await fetch(
-          `http://api.marketstack.com/v1/eod?access_key=${DATA.access_key}&symbols=${emp}&date_from=${date_from}&date_to=${date_to}&limit=${DATA.limit}`
+          `https://api.marketstack.com/v1/eod?access_key=${DATA.access_key}&symbols=${emp}&date_from=${date_from}&date_to=${date_to}&limit=${DATA.limit}`
         ),
         json = await res.json();
       $Chars_Content.classList.remove("d-none");

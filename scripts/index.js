@@ -13,7 +13,7 @@ addEventListener("DOMContentLoaded", () => {
     try {
       $h1.textContent = `Datos históricos de ${emp}`;
       let res = await fetch(
-          `http://api.marketstack.com/v1/eod?access_key=${DATA.access_key}&symbols=${emp}&date_from=${date_from}&date_to=${date_to}&limit=${DATA.limit}`
+          `https://api.marketstack.com/v1/eod?access_key=${DATA.access_key}&symbols=${emp}&date_from=${date_from}&date_to=${date_to}&limit=${DATA.limit}`
         ),
         json = await res.json();
 
