@@ -2,9 +2,11 @@ import DATA from "./keys.js";
 addEventListener("DOMContentLoaded", () => {
   const $container = document.querySelector(".container"),
     $loader = document.getElementById("loader_1"),
-    $datos = document.getElementById("datos"),
+    $select_emp = document.getElementById("select_emp"),
+    $getDataBtn = document.getElementById("getDataBtn"),
     $h1 = document.querySelector(".title"),
     $Result_Request = document.getElementById("Result_Request"),
+    $show_data = document.getElementById("show_data"),
     $fragment = document.createDocumentFragment();
 
   const getData = async (emp, date_from, date_to) => {
@@ -20,6 +22,18 @@ addEventListener("DOMContentLoaded", () => {
 
       //   TODO: HTML
       $loader.classList.add("d-none");
+      $show_data.classList.remove("d-none");
+      if (json.data.length > 0) {
+        $show_data.classList.remove("alert-warning");
+        $show_data.classList.add("alert-success");
+        $show_data.innerHTML = `<span class="bi-check2-all"></span> Mostrando <b>${
+          json.data.length
+        }</b> ${json.data.length === 1 ? "registro" : "registros"}`;
+      } else {
+        $container.innerHTML = "";
+        $show_data.classList.add("alert-warning");
+        $show_data.innerHTML = `<span class="bi-slash-circle"></span> No hay registros.`;
+      }
       // * json.data
       json.data.forEach((el) => {
         $container.textContent = "";
@@ -29,7 +43,7 @@ addEventListener("DOMContentLoaded", () => {
           "card",
           "mb-3",
           "mx-5",
-          "col-lg-3",
+          "col-lg-2",
           "col-sm-12"
         );
 
@@ -91,18 +105,35 @@ addEventListener("DOMContentLoaded", () => {
 
       let message = err.statusText || "Ocurrió un error";
 
-      $Result_Requestdatos.innerHTML = `ERROR ${
+      $Result_Request.innerHTML = `
+      <span class="bi-database-exclamation"></span> ERROR ${
         err.status || "HTTP 404 Not Found"
       }: ${message}`;
-      $datos.classList.add("text-danger");
+      $Result_Request.classList.add("text-danger");
+      $Result_Request.classList.remove("d-none");
+    } finally {
+      $loader.classList.add("d-none");
     }
   };
 
   const $contenedor_btn_date = document.getElementById("contenedor_btn_date"),
     $date_from = document.getElementById("date_from"),
     $date_to = document.getElementById("date_to"),
-    $select_emp = document.getElementById("select_emp"),
-    $getDataBtn = document.getElementById("getDataBtn");
+    fecha_Date = new Date();
+
+  let dia = fecha_Date.getDate(),
+    mes = fecha_Date.getUTCMonth(),
+    anio = fecha_Date.getUTCFullYear();
+
+  const fecha = `${anio}-${
+    (mes + 1).toString().length > 1
+      ? (mes + 1).toString()
+      : "0" + (mes + 1).toString()
+  }-${dia.toString().length > 1 ? dia.toString() : "0" + dia.toString()}`;
+
+  $date_to.setAttribute("value", fecha);
+
+  $date_to.setAttribute.value = `${fecha.getDate}-${fecha.getMonth}-${fecha.getFullYear}`;
 
   $getDataBtn.addEventListener("click", () => {
     $loader.classList.remove("d-none");

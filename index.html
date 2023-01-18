@@ -4,7 +4,11 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="https://tds.net.au/wp-content/uploads/2019/01/cropped-favicon-free-img-1.png" type="image/x-icon">
+    <link
+      rel="shortcut icon"
+      href="https://tds.net.au/wp-content/uploads/2019/01/cropped-favicon-free-img-1.png"
+      type="image/x-icon"
+    />
     <title>Datos históricos</title>
     <!-- * Bootstrap -->
     <link
@@ -28,7 +32,9 @@
   </head>
   <body>
     <h1 class="title">Datos</h1>
-    <a class="btn btn-outline-dark ms-2 w-25" href="./datos.html">Ver Gráficos</a>
+    <a class="btn btn-outline-dark m-2 w-25" href="./datos.html"
+      >Ver Gráficos</a
+    >
     <select class="form-select w-25 m-3" id="select_emp" required>
       <option selected disabled>--Seleccione la empresa que desee--</option>
       <option value="AMZN">AMAZON</option>
@@ -63,14 +69,19 @@
         value="Consultar"
       />
     </div>
-  </div>
-  <div
-      class="alert alert-danger alert-dismissible fade show mx-5 mb-3 d-none"
+
+    <div
+      class="alert alert-dismissible fade show mx-5 mb-3 d-none"
+      id="show_data"
+      role="alert"
+    ></div>
+
+    <div
+      class="alert alert-dismissible fade show mx-5 mb-3 d-none"
       id="Result_Request"
       role="alert"
     ></div>
     <span class="loader w-100 d-none" id="loader_1"></span>
-    <ol id="datos"></ol>
     <div class="container d-flex flex-wrap justify-content-evenly"></div>
   </body>
 </html>
