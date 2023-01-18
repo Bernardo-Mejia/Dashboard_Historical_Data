@@ -1,6 +1,5 @@
 import DATA from "./keys.js";
 addEventListener("DOMContentLoaded", () => {
-  console.log(DATA);
   const $container = document.querySelector(".container"),
     $loader = document.getElementById("loader_1"),
     $datos = document.getElementById("datos"),
@@ -11,8 +10,6 @@ addEventListener("DOMContentLoaded", () => {
   const getData = async (emp, date_from, date_to) => {
     try {
       $h1.textContent = `Datos históricos de ${emp}`;
-      // * `http://api.marketstack.com/v1/eod?access_key=${DATA.access_key}&symbols=${emp}&date_from=${date_from}&date_to=${date_to}&limit=${DATA.limit}`
-
       let res = await fetch(
           `http://api.marketstack.com/v1/eod?access_key=${DATA.access_key}&symbols=${emp}&date_from=${date_from}&date_to=${date_to}&limit=${DATA.limit}`
         ),
@@ -43,7 +40,7 @@ addEventListener("DOMContentLoaded", () => {
         // ? h5.card-title
         const $h5_card_title = document.createElement("h5");
         $h5_card_title.classList.add("card-title", "text-center");
-        $h5_card_title.innerHTML = el.symbol; // ! symbol <- name
+        $h5_card_title.innerHTML = el.symbol;
 
         // ? h4.card-title
         const $h5_date = document.createElement("h5");
@@ -51,7 +48,7 @@ addEventListener("DOMContentLoaded", () => {
         let date = el.date.split("T00");
         $h5_date.innerHTML = `
           <span class="bi-calendar2-date"></span> ${date[0]}
-        `; // ! date <- website
+        `;
 
         // ? ul.list-group list-group-flush
         const $ul_list_group = document.createElement("ul");
@@ -60,16 +57,16 @@ addEventListener("DOMContentLoaded", () => {
         // ? li.list-group-item
         const $li_open = document.createElement("li");
         $li_open.classList.add("list-group-item", "text-primary");
-        $li_open.innerHTML = `<span class="bi-door-open-fill"></span> Open: $${el.open}`; // ! open <- username
+        $li_open.innerHTML = `<span class="bi-door-open-fill"></span> Open: $${el.open}`;
         const $li_high = document.createElement("li");
         $li_high.classList.add("list-group-item", "text-success");
-        $li_high.innerHTML = `<span class="bi-graph-up-arrow"></span> High: $${el.high}`; // ! high <- email
+        $li_high.innerHTML = `<span class="bi-graph-up-arrow"></span> High: $${el.high}`;
         const $li_low = document.createElement("li");
         $li_low.classList.add("list-group-item", "text-danger");
-        $li_low.innerHTML = `<span class="bi-graph-down-arrow"></span> Low: $${el.low}`; // ! low <- id
+        $li_low.innerHTML = `<span class="bi-graph-down-arrow"></span> Low: $${el.low}`;
         const $li_close = document.createElement("li");
         $li_close.classList.add("list-group-item", "text-warning");
-        $li_close.innerHTML = `<span class="bi-door-closed-fill"></span> Close: $${el.close}`; // ! close <- phone
+        $li_close.innerHTML = `<span class="bi-door-closed-fill"></span> Close: $${el.close}`;
 
         // ? Añadir elementos hijos a los padres
 
@@ -91,7 +88,7 @@ addEventListener("DOMContentLoaded", () => {
       console.log(
         `Ocurrió un error al consultar los datos.\nTipo: ${err.status}\nDescripción: ${err.statusText}`
       );
-      //   console.log(err);
+
       let message = err.statusText || "Ocurrió un error";
 
       $Result_Requestdatos.innerHTML = `ERROR ${
@@ -144,12 +141,3 @@ addEventListener("DOMContentLoaded", () => {
     }
   };
 });
-
-/*
-  ! symbol: name
-  ! open: username
-  ! high: email
-  ! low: id
-  ! close: phone 
-  ! date: website
-*/

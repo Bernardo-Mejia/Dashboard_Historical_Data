@@ -11,8 +11,6 @@ addEventListener("DOMContentLoaded", () => {
   const getData = async (emp, date_from, date_to) => {
     $title.innerHTML = `Gráficas de Datos históricos del ${date_from} al ${date_to} de ${emp}`;
     try {
-      // * `http://api.marketstack.com/v1/eod?access_key=${DATA.access_key}&symbols=${emp}&date_from=${date_from}&date_to=${date_to}&limit=${DATA.limit}`
-      // * `../API/app.json`
       let res = await fetch(
           `http://api.marketstack.com/v1/eod?access_key=${DATA.access_key}&symbols=${emp}&date_from=${date_from}&date_to=${date_to}&limit=${DATA.limit}`
         ),
@@ -45,7 +43,7 @@ addEventListener("DOMContentLoaded", () => {
         date.unshift(date_format[0]);
       });
       // ? CHARTS
-      // ! opciones
+      // ! Opciones
       const getOptionChart2 = () => {
         return {
           title: {
